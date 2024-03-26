@@ -392,6 +392,7 @@
       "interpolation": "lanczos",
       "keep_proportion": false,
       "condition": "always",
+      "multiple_of": 0,
       "image": [
         "393",
         0
