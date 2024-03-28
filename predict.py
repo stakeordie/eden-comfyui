@@ -632,7 +632,6 @@ class Predictor(BasePredictor):
 
             attributes = {}
             attributes['n_samples']   = n_samples
-            attributes['nsfw_scores'] = lewd_detection(thumbnail_paths)
             attributes['job_time_seconds'] = time.time() - t_start
             attributes['seeds']       = [args.seed - n_samples + i for i in range(n_samples)]
 
