@@ -25,8 +25,6 @@ import subprocess
 import os
 import shlex
 
-from nsfw_detection import lewd_detection
-
 if DEBUG_MODE:
     debug_output_dir = "/src/tests/debug_output"
     if os.path.exists(debug_output_dir):
@@ -395,6 +393,9 @@ class Predictor(BasePredictor):
             description="Steps",
             ge=10, le=40, default=25
         ),
+        multiple_of: int = Input(
+            default=0
+        ),
         width: int = Input(
             description="Width", 
             ge=512, le=3840, default=1280
@@ -499,6 +500,8 @@ class Predictor(BasePredictor):
         input_image_paths = prep_images(input_images)
         style_image_paths = prep_images(style_images)
         mask_image_paths  = prep_images(mask_images)
+        print("input_images",input_images)
+        print("input_image_paths",input_image_paths)
 
         # Handle some custom cases:
         if mode in ["vid2vid"]:
@@ -520,6 +523,7 @@ class Predictor(BasePredictor):
         if mode == "upscale":
             # the UI form only exposes 'width' as 'Resolution' so just copy it over to height in this mode
             height = width
+            multiple_of = 4
 
         if text_input is None and mode in ["img2vid", "vid2vid", "inpaint"]:
             # in ComfyUI an empty string should be skipped by the pipeline flow and trigger CLIP-interrogator instead
@@ -584,6 +588,7 @@ class Predictor(BasePredictor):
             "steps": steps,
             "seed": seed,
             "loop": loop,
+            "multiple_of": multiple_of
         }
         args = AttrDict(args)
 
